@@ -13,7 +13,8 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonPrimitive;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
-import net.minecraft.network.chat.TranslatableComponent;
+
+import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Item;
@@ -38,7 +39,7 @@ public class BlockDump
         for (Map.Entry<ResourceKey<Block>, Block> entry : ForgeRegistries.BLOCKS.getEntries())
         {
             Block block = entry.getValue();
-            addDataToDump(blockDump, block.getRegistryName(), block, new ItemStack(entry.getValue()), tags);
+            addDataToDump(blockDump, ForgeRegistries.BLOCKS.getKey(block), block, new ItemStack(entry.getValue()), tags);
         }
 
         if (tags)
@@ -62,7 +63,7 @@ public class BlockDump
             try
             {
                 Block block = entry.getValue();
-                ResourceLocation id = block.getRegistryName();
+                ResourceLocation id = ForgeRegistries.BLOCKS.getKey(block);
                 MaterialColor materialColor = block.defaultBlockState().getMapColor(world, BlockPos.ZERO);
                 int color = materialColor != null ? materialColor.col : 0xFFFFFF;
                 blockDump.addData(id.toString(), String.format("#%06X", color), String.valueOf(color));
@@ -79,10 +80,10 @@ public class BlockDump
     {
         String modName = ModNameUtils.getModName(id);
         String registryName = id.toString();
-        String displayName = stack.isEmpty() == false ? stack.getHoverName().getString() : (new TranslatableComponent(block.getDescriptionId())).getString();
+        String displayName = stack.isEmpty() == false ? stack.getHoverName().getString() : (Component.translatable(block.getDescriptionId())).getString();
         displayName = ChatFormatting.stripFormatting(displayName);
         Item item = stack.getItem();
-        ResourceLocation itemIdRl = item != Items.AIR ? item.getRegistryName() : null;
+        ResourceLocation itemIdRl = item != Items.AIR ? ForgeRegistries.ITEMS.getKey(item) : null;
         String itemId = itemIdRl != null ? itemIdRl.toString() : DataDump.EMPTY_STRING;
         String exists = RegistryUtils.isDummied(ForgeRegistries.BLOCKS, id) ? "false" : "true";
 
@@ -141,7 +142,7 @@ public class BlockDump
         // Get a mapping of modName => collection-of-block-names
         for (Map.Entry<ResourceKey<Block>, Block> entry : ForgeRegistries.BLOCKS.getEntries())
         {
-            ResourceLocation key = entry.getValue().getRegistryName();
+            ResourceLocation key = ForgeRegistries.BLOCKS.getKey(entry.getValue());
             map.put(key.getNamespace(), key);
         }
 
@@ -172,10 +173,10 @@ public class BlockDump
 
                 if (item != null && item != Items.AIR)
                 {
-                    ResourceLocation itemIdRl = item != Items.AIR ? item.getRegistryName() : null;
+                    ResourceLocation itemIdRl = item != Items.AIR ? ForgeRegistries.ITEMS.getKey(item) : null;
                     String itemId = itemIdRl != null ? itemIdRl.toString() : DataDump.EMPTY_STRING;
 
-                    String displayName = stack.isEmpty() == false ? stack.getHoverName().getString() : (new TranslatableComponent(block.getDescriptionId())).getString();
+                    String displayName = stack.isEmpty() == false ? stack.getHoverName().getString() : (Component.translatable(block.getDescriptionId())).getString();
                     displayName = ChatFormatting.stripFormatting(displayName);
 
                     JsonObject objItem = new JsonObject();
@@ -201,6 +202,7 @@ public class BlockDump
 
     public static String getTagNamesJoined(Block block)
     {
-        return block.getTags().stream().map(ResourceLocation::toString).sorted().collect(Collectors.joining(", "));
+        return "";
+        //return block.getTags().stream().map(ResourceLocation::toString).sorted().collect(Collectors.joining(", "));
     }
 }

@@ -5,6 +5,8 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Optional;
 import java.util.Set;
+
+import net.minecraftforge.registries.ForgeRegistries;
 import org.apache.commons.lang3.tuple.Pair;
 import com.google.common.collect.Sets;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
@@ -119,7 +121,7 @@ public class LocateBlocks extends LocateBase
 
                         if (filters.contains(state))
                         {
-                            ResourceLocation name = state.getBlock().getRegistryName();
+                            ResourceLocation name = ForgeRegistries.BLOCKS.getKey(state.getBlock());
                             this.data.add(LocationData.of(name.toString(), dim, new Vec3(x, y, z)));
                             count++;
                         }

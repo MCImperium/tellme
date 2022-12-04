@@ -17,7 +17,7 @@ public class ActivityDump
         for (Map.Entry<ResourceKey<Activity>, Activity> entry : ForgeRegistries.ACTIVITIES.getEntries())
         {
             Activity type = entry.getValue();
-            dump.addData(type.getRegistryName().toString(), type.getName());
+            dump.addData(ForgeRegistries.ACTIVITIES.getKey(type).toString(), type.getName());
         }
 
         dump.addTitle("Registry name", "Key");

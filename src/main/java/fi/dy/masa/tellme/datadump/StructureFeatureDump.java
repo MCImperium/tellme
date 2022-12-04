@@ -5,10 +5,13 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
+
+import net.minecraft.core.Registry;
+import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.biome.MobSpawnSettings;
-import net.minecraft.world.level.levelgen.feature.StructureFeature;
+import net.minecraft.world.level.levelgen.structure.StructureType;
 import net.minecraftforge.registries.ForgeRegistries;
 import fi.dy.masa.tellme.util.datadump.DataDump;
 
@@ -18,11 +21,11 @@ public class StructureFeatureDump
     {
         DataDump dump = new DataDump(2, format);
 
-        for (Map.Entry<ResourceKey<StructureFeature<?>>, StructureFeature<?>> entry : ForgeRegistries.STRUCTURE_FEATURES.getEntries())
+        for (Map.Entry<ResourceKey<StructureType<?>>, StructureType<?>> entry : Registry.STRUCTURE_TYPES.entrySet())
         {
-            StructureFeature<?> feature = entry.getValue();
-            ResourceLocation id = feature.getRegistryName();
-            dump.addData(id.toString(), feature.getFeatureName());
+            StructureType<?> feature = entry.getValue();
+            ResourceLocation id = Registry.STRUCTURE_TYPES.getKey(feature);
+            dump.addData(id.toString(), Component.translatable(id.toLanguageKey()).toString());
         }
 
         dump.addTitle("Registry name", "Name");
@@ -36,7 +39,7 @@ public class StructureFeatureDump
 
         for (MobSpawnSettings.SpawnerData spawn : list)
         {
-            ResourceLocation erl = ForgeRegistries.ENTITIES.getKey(spawn.type);
+            ResourceLocation erl = ForgeRegistries.ENTITY_TYPES.getKey(spawn.type);
             String entName = erl != null ? erl.toString() : "<null>";
             int weight = spawn.getWeight().asInt();
             spawns.add(String.format("{ %s [weight: %d, min: %d, max: %d] }", entName, weight, spawn.minCount, spawn.maxCount));

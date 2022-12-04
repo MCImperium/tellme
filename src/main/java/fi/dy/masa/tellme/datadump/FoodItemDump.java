@@ -48,7 +48,7 @@ public class FoodItemDump
 
             if (item.isEdible())
             {
-                addData(itemDump, item, item.getRegistryName());
+                addData(itemDump, item, ForgeRegistries.ITEMS.getKey(item));
             }
         }
 

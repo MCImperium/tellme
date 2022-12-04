@@ -15,8 +15,10 @@ import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import com.mojang.brigadier.exceptions.DynamicCommandExceptionType;
 import net.minecraft.commands.arguments.blocks.BlockStateParser;
 import net.minecraft.core.BlockPos;
-import net.minecraft.network.chat.TextComponent;
-import net.minecraft.network.chat.TranslatableComponent;
+
+
+import net.minecraft.core.Registry;
+import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.ChunkPos;
@@ -137,7 +139,7 @@ public class BlockStats extends ChunkProcessorAllChunks
     {
         ArrayList<BlockStateCount> list = new ArrayList<>();
         ArrayListMultimap<Block, BlockStateCount> infoByBlock = ArrayListMultimap.create();
-        DynamicCommandExceptionType exception = new DynamicCommandExceptionType((type) -> new TextComponent("Invalid block state filter: '" + type + "'"));
+        DynamicCommandExceptionType exception = new DynamicCommandExceptionType((type) -> Component.literal("Invalid block state filter: '" + type + "'"));
 
         for (BlockStateCount info : this.blockStats.values())
         {
@@ -147,8 +149,8 @@ public class BlockStats extends ChunkProcessorAllChunks
         for (String filter : filters)
         {
             StringReader reader = new StringReader(filter);
-            BlockStateParser parser = (new BlockStateParser(reader, false)).parse(false);
-            BlockState state = parser.getState();
+            BlockStateParser.BlockResult res = BlockStateParser.parseForBlock(Registry.BLOCK, reader, false);
+            BlockState state = res.blockState();
 
             if (state == null)
             {
@@ -156,7 +158,7 @@ public class BlockStats extends ChunkProcessorAllChunks
             }
 
             Block block = state.getBlock();
-            Map<Property<?>, Comparable<?>> parsedProperties = parser.getProperties();
+            Map<Property<?>, Comparable<?>> parsedProperties = res.properties();
 
             // No block state properties specified, get all states for this block
             if (parsedProperties.size() == 0)
@@ -269,7 +271,7 @@ public class BlockStats extends ChunkProcessorAllChunks
         {
             Block block = state.getBlock();
             ItemStack stack = new ItemStack(block);
-            String displayName = stack.isEmpty() == false ? stack.getHoverName().getString() : (new TranslatableComponent(block.getDescriptionId())).getString();
+            String displayName = stack.isEmpty() == false ? stack.getHoverName().getString() : (Component.translatable(block.getDescriptionId())).getString();
 
             this.state = state;
             this.id = id;

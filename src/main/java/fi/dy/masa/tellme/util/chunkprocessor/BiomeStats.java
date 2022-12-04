@@ -50,7 +50,7 @@ public class BiomeStats
             for (int z = zMin; z <= zMax; ++z)
             {
                 posMutable.set(x, 0, z);
-                Biome biome = biomeManager.getBiome(posMutable);
+                Biome biome = biomeManager.getBiome(posMutable).get();
                 counts.addTo(biome, 1);
             }
         }
@@ -75,7 +75,7 @@ public class BiomeStats
             for (int x = centerX - sampleRadius * sampleInterval; x <= endX; x += sampleInterval)
             {
                 posMutable.set(x, 0, z);
-                Biome biome = biomeManager.getBiome(posMutable);
+                Biome biome = biomeManager.getBiome(posMutable).get();
                 counts.addTo(biome, 1);
                 ++count;
             }

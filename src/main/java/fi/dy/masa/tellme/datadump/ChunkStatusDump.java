@@ -18,7 +18,7 @@ public class ChunkStatusDump
         {
             ChunkStatus val = entry.getValue();
             String ordinal = String.valueOf(val.getIndex());
-            String regName = val.getRegistryName().toString();
+            String regName = ForgeRegistries.CHUNK_STATUS.getKey(val).toString();
             String type = val.getChunkType().name();
             String taskRange = String.valueOf(val.getRange());
 

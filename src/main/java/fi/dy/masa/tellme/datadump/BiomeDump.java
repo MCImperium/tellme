@@ -10,23 +10,26 @@ import com.google.common.collect.ImmutableList;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Registry;
+import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
-import net.minecraft.network.chat.TextComponent;
+
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.tags.BiomeTags;
 import net.minecraft.world.entity.MobCategory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.biome.BiomeSpecialEffects;
 import net.minecraft.world.level.biome.MobSpawnSettings;
-import net.minecraftforge.common.BiomeDictionary;
 import net.minecraftforge.common.BiomeManager;
 import fi.dy.masa.tellme.TellMe;
 import fi.dy.masa.tellme.util.OutputUtils;
 import fi.dy.masa.tellme.util.datadump.DataDump;
 import fi.dy.masa.tellme.util.datadump.DataDump.Alignment;
 import fi.dy.masa.tellme.util.datadump.DataDump.Format;
+import net.minecraftforge.common.Tags;
+import net.minecraftforge.registries.ForgeRegistries;
 
 public class BiomeDump
 {
@@ -88,7 +91,7 @@ public class BiomeDump
                 // Add the spawns grouped by category and sorted alphabetically within each category
                 for (MobSpawnSettings.SpawnerData spawn : biome.getMobSettings().getMobs(type).unwrap())
                 {
-                    ResourceLocation erl = spawn.type.getRegistryName();
+                    ResourceLocation erl = ForgeRegistries.ENTITY_TYPES.getKey(spawn.type);
                     String entName = erl != null ? erl.toString() : "<null>";
                     int weight = spawn.getWeight().asInt();
                     tmpList.add(String.format("{ %s [weight: %d, min: %d, max: %d] }", entName, weight, spawn.minCount, spawn.maxCount));
@@ -111,7 +114,7 @@ public class BiomeDump
     {
         Level world = entity.getCommandSenderWorld();
         BlockPos pos = entity.blockPosition();
-        Biome biome = world.getBiome(pos);
+        Biome biome = world.getBiome(pos).get();
         ChatFormatting green = ChatFormatting.GREEN;
         ChatFormatting red = ChatFormatting.RED;
 
@@ -141,34 +144,34 @@ public class BiomeDump
         String biomeTypes = getBiomeTypesForBiome(world, biome);
         String biomeDictionaryTypes = getBiomeDictionaryTypesForBiome(getBiomeKey(biome, world));
         //boolean isOceanic = BiomeManager.oceanBiomes.contains(biome);
-        MutableComponent textPre = new TextComponent("ID: ")
-                                                    .append(new TextComponent(intId).withStyle(green))
+        MutableComponent textPre = Component.literal("ID: ")
+                                                    .append(Component.literal(intId).withStyle(green))
                                                     .append(" - Registry name: ");
 
-        entity.displayClientMessage(new TextComponent("------------- Current biome info ------------"), false);
-        entity.displayClientMessage(OutputUtils.getClipboardCopiableMessage(textPre, new TextComponent(regName).withStyle(green), new TextComponent("")), false);
+        entity.displayClientMessage(Component.literal("------------- Current biome info ------------"), false);
+        entity.displayClientMessage(OutputUtils.getClipboardCopiableMessage(textPre, Component.literal(regName).withStyle(green), Component.literal("")), false);
 
-        entity.displayClientMessage(new TextComponent("Temperature: ")
-                                   .append(new TextComponent(strTemperature).withStyle(green)), false);
-        entity.displayClientMessage(new TextComponent("RainType: ").append(new TextComponent(strRainType).withStyle(green))
-                                   .append(", downfall: ").append(new TextComponent(strRainfall).withStyle(green))
-                                   .append(", snows: ").append(new TextComponent(strSnowing).withStyle(canSnow ? green : red)), false);
-        entity.displayClientMessage(new TextComponent("Max spawn chance: ").append(new TextComponent(strMaxSpawnChance).withStyle(green)), false);
+        entity.displayClientMessage(Component.literal("Temperature: ")
+                                   .append(Component.literal(strTemperature).withStyle(green)), false);
+        entity.displayClientMessage(Component.literal("RainType: ").append(Component.literal(strRainType).withStyle(green))
+                                   .append(", downfall: ").append(Component.literal(strRainfall).withStyle(green))
+                                   .append(", snows: ").append(Component.literal(strSnowing).withStyle(canSnow ? green : red)), false);
+        entity.displayClientMessage(Component.literal("Max spawn chance: ").append(Component.literal(strMaxSpawnChance).withStyle(green)), false);
 
-        entity.displayClientMessage(new TextComponent("Fog Color: ")
-                                   .append(new TextComponent(strFogColor).withStyle(green)), false);
-        entity.displayClientMessage(new TextComponent("Sky Color: ")
-                                   .append(new TextComponent(strSkyColor).withStyle(green)), false);
-        entity.displayClientMessage(new TextComponent("Water Color Multiplier: ")
-                                   .append(new TextComponent(strWaterColor).withStyle(green)), false);
-        entity.displayClientMessage(new TextComponent("Water Fog Color: ")
-                                   .append(new TextComponent(strWaterFogColor).withStyle(green)), false);
+        entity.displayClientMessage(Component.literal("Fog Color: ")
+                                   .append(Component.literal(strFogColor).withStyle(green)), false);
+        entity.displayClientMessage(Component.literal("Sky Color: ")
+                                   .append(Component.literal(strSkyColor).withStyle(green)), false);
+        entity.displayClientMessage(Component.literal("Water Color Multiplier: ")
+                                   .append(Component.literal(strWaterColor).withStyle(green)), false);
+        entity.displayClientMessage(Component.literal("Water Fog Color: ")
+                                   .append(Component.literal(strWaterFogColor).withStyle(green)), false);
 
-        entity.displayClientMessage(new TextComponent("Biome types: ")
-                                   .append(new TextComponent(biomeTypes).withStyle(green)), false);
+        entity.displayClientMessage(Component.literal("Biome types: ")
+                                   .append(Component.literal(biomeTypes).withStyle(green)), false);
 
-        entity.displayClientMessage(new TextComponent("Biome dictionary types: ")
-                                   .append(new TextComponent(biomeDictionaryTypes).withStyle(green)), false);
+        entity.displayClientMessage(Component.literal("Biome dictionary types: ")
+                                   .append(Component.literal(biomeDictionaryTypes).withStyle(green)), false);
 
         // Get the grass and foliage colors, if called on the client side
         TellMe.dataProvider.getCurrentBiomeInfoClientSide(entity, biome);
@@ -241,7 +244,8 @@ public class BiomeDump
 
     private static String getBiomeDictionaryTypesForBiome(ResourceKey<Biome> biomeKey)
     {
-        List<String> typeStrings = new ArrayList<>();
+        return "";
+        /*List<String> typeStrings = new ArrayList<>();
         Set<BiomeDictionary.Type> types = BiomeDictionary.getTypes(biomeKey);
 
         for (BiomeDictionary.Type type : types)
@@ -256,6 +260,7 @@ public class BiomeDump
         }
 
         return "";
+         */
     }
 
     public static class IdToStringHolder implements Comparable<IdToStringHolder>

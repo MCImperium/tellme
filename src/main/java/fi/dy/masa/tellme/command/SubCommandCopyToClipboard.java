@@ -9,7 +9,7 @@ import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
 import net.minecraft.commands.arguments.MessageArgument;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.TextComponent;
+
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.Entity;
 import net.minecraftforge.network.NetworkDirection;
@@ -41,7 +41,7 @@ public class SubCommandCopyToClipboard
         }
         else
         {
-            source.sendSuccess(new TextComponent("'/tellme copy-to-clipboard' can only be run by a player"), false);
+            source.sendSuccess(Component.literal("'/tellme copy-to-clipboard' can only be run by a player"), false);
             return -1;
         }
 

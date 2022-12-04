@@ -15,7 +15,8 @@ import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.multiplayer.ClientPacketListener;
 import net.minecraft.client.resources.language.I18n;
 import net.minecraft.core.BlockPos;
-import net.minecraft.network.chat.TextComponent;
+
+import net.minecraft.network.chat.Component;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.CreativeModeTab;
@@ -51,7 +52,7 @@ public class DataProviderClient extends DataProviderBase
             Vec3 vec = mc.player.position();
             ChunkPos center = new ChunkPos(((int) Math.floor(vec.x)) >> 4, ((int) Math.floor(vec.z)) >> 4);
             ArrayList<LevelChunk> list = new ArrayList<>();
-            final int renderDistance = mc.options.renderDistance;
+            final int renderDistance = mc.options.renderDistance().get();
 
             for (int chunkZ = center.z - renderDistance; chunkZ <= center.z + renderDistance; ++chunkZ)
             {
@@ -122,12 +123,12 @@ public class DataProviderClient extends DataProviderBase
 
         // These are client-side only:
         int grassColor = biome.getGrassColor(pos.getX(), pos.getZ());
-        entity.displayClientMessage(new TextComponent("Grass color: ")
-                    .append(new TextComponent(String.format("0x%08X (%d)", grassColor, grassColor)).withStyle(green)), false);
+        entity.displayClientMessage(Component.literal("Grass color: ")
+                    .append(Component.literal(String.format("0x%08X (%d)", grassColor, grassColor)).withStyle(green)), false);
 
         int foliageColor = biome.getFoliageColor();
-        entity.displayClientMessage(new TextComponent("Foliage color: ")
-                    .append(new TextComponent(String.format("0x%08X (%d)", foliageColor, foliageColor)).withStyle(green)), false);
+        entity.displayClientMessage(Component.literal("Foliage color: ")
+                    .append(Component.literal(String.format("0x%08X (%d)", foliageColor, foliageColor)).withStyle(green)), false);
     }
 
     @Override

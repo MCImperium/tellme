@@ -2,27 +2,30 @@ package fi.dy.masa.tellme.datadump;
 
 import java.util.List;
 import java.util.Map;
+
+import net.minecraft.core.Registry;
+import net.minecraft.core.RegistryAccess;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraftforge.common.world.ForgeWorldPreset;
-import net.minecraftforge.registries.ForgeRegistries;
+import net.minecraft.world.level.levelgen.presets.WorldPreset;
 import fi.dy.masa.tellme.util.datadump.DataDump;
+import net.minecraftforge.server.ServerLifecycleHooks;
 
 public class WorldPresetDump
 {
     public static List<String> getFormattedDump(DataDump.Format format)
     {
-        DataDump potionDump = new DataDump(2, format);
-
-        for (Map.Entry<ResourceKey<ForgeWorldPreset>, ForgeWorldPreset> entry : ForgeRegistries.WORLD_TYPES.getEntries())
+        DataDump potionDump = new DataDump(1, format);
+        RegistryAccess access = ServerLifecycleHooks.getCurrentServer().registryAccess();
+        for (Map.Entry<ResourceKey<WorldPreset>, WorldPreset> entry : access.registry(Registry.WORLD_PRESET_REGISTRY).get().entrySet())
         {
-            ForgeWorldPreset type = entry.getValue();
-            ResourceLocation id = type.getRegistryName();
+            WorldPreset type = entry.getValue();
+            ResourceLocation id = access.registry(Registry.WORLD_PRESET_REGISTRY).get().getKey(type);
 
-            potionDump.addData(id.toString(), type.getDisplayName().getString());
+            potionDump.addData(id.toString());
         }
 
-        potionDump.addTitle("Registry name", "Display Name");
+        potionDump.addTitle("Registry name");
 
         return potionDump.getLines();
     }

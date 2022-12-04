@@ -16,7 +16,7 @@ public class DimensionDump
 {
     public static List<String> getFormattedDimensionDump(Format format, @Nullable MinecraftServer server, boolean verbose)
     {
-        DataDump dump = new DataDump(verbose ? 12 : 3, format);
+        DataDump dump = new DataDump(verbose ? 11 : 3, format);
 
         if (server != null)
         {
@@ -31,7 +31,7 @@ public class DimensionDump
                 {
                     String bedWorks = String.valueOf(dim.bedWorks());
                     String ceiling = String.valueOf(dim.hasCeiling());
-                    String dragon = String.valueOf(dim.createDragonFight());
+                    //String dragon = String.valueOf(dim.createDragonFight());
                     String raids = String.valueOf(dim.hasRaids());
                     String skyLight = String.valueOf(dim.hasSkyLight());
                     String logicalHeight = String.valueOf(dim.logicalHeight());
@@ -39,7 +39,7 @@ public class DimensionDump
                     String respawnAnchor = String.valueOf(dim.respawnAnchorWorks());
                     String ultrawarm = String.valueOf(dim.ultraWarm());
 
-                    dump.addData(dimId, natural, coordScale, bedWorks, ceiling, dragon, logicalHeight, piglinSafe, raids, respawnAnchor, skyLight, ultrawarm);
+                    dump.addData(dimId, natural, coordScale, bedWorks, ceiling, logicalHeight, piglinSafe, raids, respawnAnchor, skyLight, ultrawarm);
                 }
                 else
                 {
@@ -54,7 +54,7 @@ public class DimensionDump
             dump.setColumnAlignment(1, Alignment.RIGHT); // natural
             dump.setColumnAlignment(2, Alignment.RIGHT); // bed
             dump.setColumnAlignment(3, Alignment.RIGHT); // ceiling
-            dump.setColumnAlignment(4, Alignment.RIGHT); // dragon
+            //dump.setColumnAlignment(4, Alignment.RIGHT); // dragon
             dump.setColumnProperties(5, Alignment.RIGHT, true); // height
             dump.setColumnAlignment(6, Alignment.RIGHT); // piglin
             dump.setColumnAlignment(7, Alignment.RIGHT); // raids

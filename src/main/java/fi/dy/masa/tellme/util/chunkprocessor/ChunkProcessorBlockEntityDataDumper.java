@@ -73,7 +73,7 @@ public class ChunkProcessorBlockEntityDataDumper extends ChunkProcessorBase
 
             if (noFilters || filters.contains(type))
             {
-                ResourceLocation id = ForgeRegistries.BLOCK_ENTITIES.getKey(type);
+                ResourceLocation id = ForgeRegistries.BLOCK_ENTITY_TYPES.getKey(type);
 
                 if (id != null)
                 {
@@ -92,7 +92,7 @@ public class ChunkProcessorBlockEntityDataDumper extends ChunkProcessorBase
 
                     try
                     {
-                        CompoundTag tag = be.save(new CompoundTag());
+                        CompoundTag tag = be.saveWithFullMetadata();
                         this.data.add(new BlockEntityDataEntry(pos, id.toString(), tag.toString()));
                     }
                     catch (Exception e)

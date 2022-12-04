@@ -61,7 +61,7 @@ public class ItemDump
         for (Map.Entry<ResourceKey<Item>, Item> entry : ForgeRegistries.ITEMS.getEntries())
         {
             Item item = entry.getValue();
-            provider.addLine(itemDump, new ItemStack(item), item.getRegistryName());
+            provider.addLine(itemDump, new ItemStack(item), ForgeRegistries.ITEMS.getKey(item));
         }
 
         provider.addTitle(itemDump);
@@ -98,14 +98,15 @@ public class ItemDump
 
     public static String getTagNamesJoined(Item item)
     {
-        return item.getTags().stream().map(ResourceLocation::toString).sorted().collect(Collectors.joining(", "));
+        return "";
+        //return item.getTags().stream().map(ResourceLocation::toString).sorted().collect(Collectors.joining(", "));
     }
 
     public static String getStackInfoBasic(ItemStack stack)
     {
         if (stack.isEmpty() == false)
         {
-            ResourceLocation rl = stack.getItem().getRegistryName();
+            ResourceLocation rl = ForgeRegistries.ITEMS.getKey(stack.getItem());
             String regName = rl != null ? rl.toString() : "<null>";
             String displayName = stack.getHoverName().getString();
             displayName = ChatFormatting.stripFormatting(displayName);
@@ -120,7 +121,7 @@ public class ItemDump
     {
         if (stack.isEmpty() == false)
         {
-            ResourceLocation rl = stack.getItem().getRegistryName();
+            ResourceLocation rl = ForgeRegistries.ITEMS.getKey(stack.getItem());
             String regName = rl != null ? rl.toString() : "<null>";
             String displayName = stack.getHoverName().getString();
             displayName = ChatFormatting.stripFormatting(displayName);
@@ -139,7 +140,7 @@ public class ItemDump
         // Get a mapping of modName => collection-of-block-names
         for (Map.Entry<ResourceKey<Item>, Item> entry : ForgeRegistries.ITEMS.getEntries())
         {
-            ResourceLocation key = entry.getValue().getRegistryName();
+            ResourceLocation key = ForgeRegistries.ITEMS.getKey(entry.getValue());
             map.put(key.getNamespace(), key);
         }
 

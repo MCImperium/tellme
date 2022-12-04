@@ -1,15 +1,16 @@
 package fi.dy.masa.tellme.datadump;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
+
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.tags.EntityTypeTags;
 import net.minecraft.tags.FluidTags;
 import net.minecraft.tags.ItemTags;
-import net.minecraft.tags.Tag;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.Block;
@@ -20,7 +21,8 @@ public class TagDump
 {
     public static List<String> getFormattedTagDump(DataDump.Format format, TagType type, boolean split)
     {
-        DataDump dump = new DataDump(2, format);
+        return new ArrayList<>();
+        /*DataDump dump = new DataDump(2, format);
 
         switch (type)
         {
@@ -80,6 +82,8 @@ public class TagDump
         dump.addTitle("ID", "Tagged objects");
 
         return dump.getLines();
+
+         */
     }
 
     private static void addLines(DataDump dump, String tagId, Stream<String> stream, boolean split)

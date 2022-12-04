@@ -4,9 +4,9 @@ import java.lang.invoke.MethodHandle;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.registries.ForgeRegistry;
 import net.minecraftforge.registries.IForgeRegistry;
-import net.minecraftforge.registries.IForgeRegistryEntry;
 import fi.dy.masa.tellme.TellMe;
 import fi.dy.masa.tellme.util.MethodHandleUtils.UnableToFindMethodHandleException;
+import org.checkerframework.checker.units.qual.K;
 
 public class RegistryUtils
 {
@@ -25,7 +25,7 @@ public class RegistryUtils
         }
     }
 
-    public static <K extends IForgeRegistryEntry<K>> boolean isDummied(IForgeRegistry<K> registry, ResourceLocation rl)
+    public static <K> boolean isDummied(IForgeRegistry<K> registry, ResourceLocation rl)
     {
         try
         {

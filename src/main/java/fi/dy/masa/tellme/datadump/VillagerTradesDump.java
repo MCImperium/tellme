@@ -6,6 +6,8 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.Random;
 import javax.annotation.Nullable;
+
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.npc.VillagerProfession;
 import net.minecraft.world.entity.npc.VillagerTrades;
@@ -23,11 +25,11 @@ public class VillagerTradesDump
         Random rand = new Random();
 
         ArrayList<VillagerProfession> professions = new ArrayList<>(VillagerTrades.TRADES.keySet());
-        professions.sort(Comparator.comparing(v -> v.getRegistryName().toString()));
+        professions.sort(Comparator.comparing(v -> v.name()));
 
         for (VillagerProfession profession : professions)
         {
-            String regName = profession.getRegistryName().toString();
+            String regName = profession.name();
 
             dump.addData(regName, profession.toString(), "", "", "", "");
             Int2ObjectMap<ItemListing[]> map = VillagerTrades.TRADES.get(profession);
@@ -58,7 +60,7 @@ public class VillagerTradesDump
                             continue;
                         }
 
-                        MerchantOffer offer = trade.getOffer(trader, rand);
+                        MerchantOffer offer = trade.getOffer(trader, RandomSource.create());
 
                         if (offer != null)
                         {

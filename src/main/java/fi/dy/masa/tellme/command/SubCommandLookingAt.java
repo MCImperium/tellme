@@ -8,7 +8,8 @@ import com.mojang.brigadier.tree.CommandNode;
 import com.mojang.brigadier.tree.LiteralCommandNode;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
-import net.minecraft.network.chat.TextComponent;
+
+import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.EntityHitResult;
@@ -75,7 +76,7 @@ public class SubCommandLookingAt
         }
         else
         {
-            player.displayClientMessage(new TextComponent("Not currently looking at anything within range"), false);
+            player.displayClientMessage(Component.literal("Not currently looking at anything within range"), false);
         }
     }
 }

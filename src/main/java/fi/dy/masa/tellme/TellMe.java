@@ -1,5 +1,10 @@
 package fi.dy.masa.tellme;
 
+import net.minecraft.commands.synchronization.ArgumentTypeInfo;
+import net.minecraft.commands.synchronization.ArgumentTypeInfos;
+import net.minecraft.core.Registry;
+import net.minecraftforge.event.server.ServerStartingEvent;
+import net.minecraftforge.registries.DeferredRegister;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import net.minecraftforge.common.MinecraftForge;
@@ -29,6 +34,8 @@ public class TellMe
     public static DataProviderBase dataProvider;
     private static boolean isClient;
 
+    DeferredRegister<ArgumentTypeInfo<?, ?>> argTypeRegistry = DeferredRegister.create(Registry.COMMAND_ARGUMENT_TYPE_REGISTRY, "tellme");
+
     public TellMe()
     {
         dataProvider = new DataProviderBase();
@@ -47,7 +54,9 @@ public class TellMe
 
         Configs.loadConfig(FMLPaths.CONFIGDIR.get().resolve(Reference.MOD_ID + ".toml"));
 
-        CommandTellMe.registerArgumentTypes();
+        CommandTellMe.registerArgumentTypes(argTypeRegistry);
+
+        argTypeRegistry.register(FMLJavaModLoadingContext.get().getModEventBus());
     }
 
     private void onCommonSetup(final FMLCommonSetupEvent event)

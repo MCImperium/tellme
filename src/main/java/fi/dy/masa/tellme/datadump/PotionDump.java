@@ -22,7 +22,7 @@ public class PotionDump
         for (Map.Entry<ResourceKey<Potion>, Potion> entry : ForgeRegistries.POTIONS.getEntries())
         {
             Potion potion = entry.getValue();
-            String regName = potion.getRegistryName().toString();
+            String regName = ForgeRegistries.POTIONS.getKey(potion).toString();
 
             @SuppressWarnings("deprecation")
             String id = String.valueOf(Registry.POTION.getId(potion));
@@ -43,7 +43,7 @@ public class PotionDump
         String isBad = String.valueOf(effect.getCategory() == MobEffectCategory.HARMFUL);
         String isBeneficial = String.valueOf(effect.isBeneficial());
 
-        return "MobEffect:[reg:" + effect.getRegistryName().toString() + ",name:" + effect.getDescriptionId() + ",isBad:" + isBad + ",isBeneficial:" + isBeneficial + "]";
+        return "MobEffect:[reg:" + ForgeRegistries.MOB_EFFECTS.getKey(effect).toString() + ",name:" + effect.getDescriptionId() + ",isBad:" + isBad + ",isBeneficial:" + isBeneficial + "]";
     }
 
     public static String getMobEffectInstanceInfo(MobEffectInstance effect)

@@ -21,7 +21,7 @@ public class MobEffectDump
         for (Map.Entry<ResourceKey<MobEffect>, MobEffect> entry : ForgeRegistries.MOB_EFFECTS.getEntries())
         {
             MobEffect effect = entry.getValue();
-            ResourceLocation rl = effect.getRegistryName();
+            ResourceLocation rl = ForgeRegistries.MOB_EFFECTS.getKey(effect);
 
             @SuppressWarnings("deprecation")
             String id = String.valueOf(Registry.MOB_EFFECT.getId(effect));
